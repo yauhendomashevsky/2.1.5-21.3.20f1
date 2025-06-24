@@ -7,6 +7,7 @@ public class ShootAbility : MonoBehaviour, Ability
     public GameObject bulletPrefab;
     public float shootDelay;
     private float shootTime = float.MinValue;
+    public Vector3 offset;
 
     public void Execute()
     {
@@ -14,9 +15,9 @@ public class ShootAbility : MonoBehaviour, Ability
 
         shootTime = Time.time;
 
-        if (bulletPrefab != null) 
-        { 
-            var newBullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
+        if (bulletPrefab != null)
+        {
+            var newBullet = Instantiate(bulletPrefab, transform.position + offset, transform.rotation);
         }
         else
         {

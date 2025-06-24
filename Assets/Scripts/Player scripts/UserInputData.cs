@@ -8,7 +8,7 @@ public class UserInputData : MonoBehaviour, IConvertGameObjectToEntity
     public float rushSpeed;
     public float rotSpeed;
     public MonoBehaviour shootAction;
-
+    
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
         dstManager.AddComponentData(entity, new InputData());
