@@ -21,7 +21,7 @@ public class BulletMoveSystem : ComponentSystem
             .ForEach((Entity entity, Transform transform, ref BulletMoveData bulletData) =>
             {
                 var pos = transform.position;
-                pos += new Vector3(0, 0, bulletData.bulletSpeed);    
+                pos += new Vector3(0, 0, bulletData.bulletSpeed);
                 transform.position = pos;   
             });
     }
