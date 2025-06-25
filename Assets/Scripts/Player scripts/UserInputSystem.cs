@@ -40,7 +40,7 @@ public class UserInputSystem : ComponentSystem
         shootAction = new InputAction("shoot", binding: "<Keyboard>/Space");
         shootAction.performed += context => { shootInput = 0.1f; };
         shootAction.started += context => { shootInput = context.ReadValue<float>(); };
-        shootAction.canceled += context => { shootInput = context.ReadValue<float>(); };
+        shootAction.canceled += context => { shootInput = 0f; };
         shootAction.Enable();
 
 

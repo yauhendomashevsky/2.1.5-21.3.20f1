@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8401412187624316982}
   - component: {fileID: 8401412187624316983}
   - component: {fileID: 8401412187624316976}
-  - component: {fileID: 8401412187624316977}
   - component: {fileID: 8401412187624316980}
+  - component: {fileID: 7046619001095997060}
   m_Layer: 0
   m_Name: bullet
   m_TagString: Untagged
@@ -100,19 +100,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8401412187624316977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8401412187624316978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ConversionMode: 1
 --- !u!114 &8401412187624316980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,5 +112,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01adf480a3c81e848b937cfcd8407853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 3
+  bulletSpeed: 300
   bulletLife: 3
+--- !u!114 &7046619001095997060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401412187624316978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 1
