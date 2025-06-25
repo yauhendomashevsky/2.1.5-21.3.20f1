@@ -21,6 +21,7 @@ public class ShootSystem : ComponentSystem
             if (inputData.shootAction != null && inputData.shootAction is Ability ability && userData.shoot > 0f)
                 {
                     ability.Execute();
+                    userData.shoot = 0f;
                 }
             });
     }

@@ -14,6 +14,7 @@ public class BulletData : MonoBehaviour, IConvertGameObjectToEntity
     {
         dstManager.AddComponentData(entity, new BulletMoveData() { bulletSpeed = bulletSpeed / 50 });
         dstManager.AddComponentData(entity, new BulletLifeData() { lifeTime = bulletLife });
+        dstManager.AddComponentData(entity, new BulletDirectionData());
     }
 }
 
@@ -26,3 +27,9 @@ public struct BulletLifeData :IComponentData
 {
     public float lifeTime;
 }
+
+public struct BulletDirectionData : IComponentData
+{
+    public float3 direction;
+}
+

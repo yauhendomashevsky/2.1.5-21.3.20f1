@@ -11,17 +11,19 @@ public class BulletMoveSystem : ComponentSystem
     {
         bulletQuery = GetEntityQuery(
             ComponentType.ReadOnly<BulletMoveData>(),
-            ComponentType.ReadOnly<Transform>()
+            ComponentType.ReadOnly<Transform>(),
+            ComponentType.ReadOnly<BulletDirectionData>()
             );
     }
 
     protected override void OnUpdate()
     {
         Entities.With(bulletQuery)
-            .ForEach((Entity entity, Transform transform, ref BulletMoveData bulletData) =>
+            .ForEach((Entity entity, Transform transform, ref BulletMoveData bulletData, ref BulletDirectionData dirData) =>
             {
+                var deltaTime = Time.DeltaTime;
                 var pos = transform.position;
-                pos += new Vector3(0, 0, bulletData.bulletSpeed);
+                pos += transform.forward * bulletData.bulletSpeed * deltaTime;
                 transform.position = pos;   
             });
     }
