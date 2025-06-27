@@ -37,10 +37,10 @@ public class UserInputSystem : ComponentSystem
         moveAction.Enable();
 
 
-        shootAction = new InputAction("shoot", binding: "<Keyboard>/Space");
-        shootAction.performed += context => { shootInput = 0.1f; };
-        shootAction.started += context => { shootInput = context.ReadValue<float>(); };
-        shootAction.canceled += context => { shootInput = 0f; };
+        shootAction = new InputAction("shoot", InputActionType.Button, "<Keyboard>/Space");
+        //shootAction.performed += context => { shootInput = 0f; };
+        //shootAction.started += context => { shootInput = context.ReadValue<float>(); };
+        //shootAction.canceled += context => { shootInput = 0f; };
         shootAction.Enable();
 
 
@@ -58,15 +58,30 @@ public class UserInputSystem : ComponentSystem
         rushAction.Disable();
     }
 
+    //protected override void OnUpdate()
+    //{
+    //    bool isShootTriggered = shootAction.triggered;
+    //    Entities.With(moveQuery)
+    //        .ForEach((Entity entity, ref InputData userData) =>
+    //        {
+    //            userData.move = moveInput;
+    //            userData.shoot = shootInput;
+    //            userData.rush = rushInput;
+    //            userData.rotate = moveInput;
+    //        });
+    //}
+
     protected override void OnUpdate()
     {
+        bool isShootTriggered = shootAction.triggered; 
         Entities.With(moveQuery)
-            .ForEach((Entity entity, ref InputData userData) =>
+            .ForEach((Entity entity, ref InputData userData) => 
             {
-                userData.move = moveInput;
-                userData.shoot = shootInput;
-                userData.rush = rushInput;
-                userData.rotate = moveInput;
+                userData.move = moveAction.ReadValue<Vector2>(); 
+                userData.shoot = isShootTriggered ? 1f : 0f;
+                userData.rush = rushAction.ReadValue<float>();
+                userData.rotate = moveAction.ReadValue<Vector2>();
             });
     }
+
 }
