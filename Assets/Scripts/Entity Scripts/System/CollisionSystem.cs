@@ -6,80 +6,69 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
+
 public class CollisionSystem : ComponentSystem
 {
-    private EntityQuery collisionQuery;
-    private EntityQuery healthQuery;
-
-    private Collider[] colliders = new Collider[50];
+    private EntityQuery _collisionQuery;
+    private Collider[] _colliders = new Collider[50];
 
     protected override void OnCreate()
     {
-        collisionQuery = GetEntityQuery(ComponentType.ReadOnly<ActorColliderData>(), ComponentType.ReadOnly<TrapAbility>());
-        healthQuery = GetEntityQuery(ComponentType.ReadOnly<ActorColliderData>(), ComponentType.ReadOnly<HealthAbility>());
+        _collisionQuery = GetEntityQuery(ComponentType.ReadOnly<ActorColliderData>(), ComponentType.ReadOnly<Transform>());
     }
+
 
     protected override void OnUpdate()
     {
         var dstManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        QueryUpdate(collisionQuery);
-        QueryUpdate(healthQuery);
-    }
 
-    private void QueryUpdate(EntityQuery query)
-    {
-        Entities.With(query).ForEach(
-            (Entity entity, Transform transform, ref ActorColliderData data) =>
+        Entities.With(_collisionQuery).ForEach(
+            (Entity entity, CollisionAbility ability, ref ActorColliderData colliderData) =>
             {
-                if (transform != null)
+                if (ability != null)
                 {
-                    var gameObject = transform.gameObject;
+                    var gameObject = ability.gameObject;
+                    float3 position = gameObject.transform.position;
+                    Quaternion rotation = gameObject.transform.rotation;
 
-                    float3 pos = gameObject.transform.position;
-                    Quaternion quaternion = gameObject.transform.rotation;
-
-                    var ability = gameObject.GetComponent<IcollisionAbility>();
-
-                    if (ability == null) { return; }
-
-                    ability.Colliders?.Clear();
+                    var _collList = new List<Collider>();
+                    ability.collisions?.Clear();
 
                     int size = 0;
 
-                    switch (data.type)
+                    switch (colliderData.type)
                     {
                         case ColliderType.Sphere:
-                            size = Physics.OverlapSphereNonAlloc(data.SphereCenter + pos, data.SphereRadius, colliders);
+                            size = Physics.OverlapSphereNonAlloc(colliderData.SphereCenter + position, colliderData.SphereRadius, _colliders);
                             break;
                         case ColliderType.Capsule:
-                            var centre = ((data.CapsuleCenter + pos) + (data.CapsuleEnd + pos) / 2f);
-                            var point1 = data.CapsuleCenter + pos;
-                            var point2 = data.CapsuleEnd + pos;
-                            point1 = (float3)(quaternion * (point1 - centre)) + centre;
-                            point2 = (float3)(quaternion * (point2 - centre)) + centre;
-                            size = Physics.OverlapCapsuleNonAlloc(point1, point2, data.CapsuleRadius, colliders);
+                            var centre = ((colliderData.CapsuleCenter + position) + (colliderData.CapsuleEnd + position)) / 2f;
+                            var point1 = colliderData.CapsuleCenter + position;
+                            var point2 = colliderData.CapsuleEnd + position;
+                            point1 = (float3)(rotation * (point1 - centre)) + centre;
+                            point2 = (float3)(rotation * (point2 - centre)) + centre;
+                            size = Physics.OverlapCapsuleNonAlloc(point1, point2, colliderData.CapsuleRadius, _colliders);
                             break;
                         case ColliderType.Box:
-                            size = Physics.OverlapBoxNonAlloc(data.BoxCenter + pos, data.BoxHalfExtend, colliders, data.BoxOrientation * quaternion);
+                            size = Physics.OverlapBoxNonAlloc(colliderData.BoxCenter + position, colliderData.BoxHalfExtend, _colliders, colliderData.BoxOrientation * rotation);
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
 
-
                     if (size > 0)
                     {
-                        ability.Colliders = colliders.ToList();
-                        foreach (Collider c in colliders)
+                        foreach (var collider in _colliders)
                         {
-                            if (c != null)
-                            {
-                                ability.Colliders.Add(c);
-                                ability.Execute();
-                            }
+                            //_collList.Add(collider);
+                            ability.collisions.Add(collider);
                         }
+
+                        //ability.collisions = _colliders.ToList();
+                        ability.Execute();
                     }
                 }
             });
     }
 }
+

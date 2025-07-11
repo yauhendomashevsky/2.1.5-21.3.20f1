@@ -17,8 +17,6 @@ public class ShootAbility : MonoBehaviour, Ability
             return;
         }
 
-        //shootTime = Time.time; 
-
         if (nextShootTime >= shootInterval)
         {
             var newBullet = Instantiate(bulletPrefab, transform.position + offset, Quaternion.LookRotation(transform.forward));

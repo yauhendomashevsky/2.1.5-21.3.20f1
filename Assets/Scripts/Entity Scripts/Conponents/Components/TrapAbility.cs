@@ -2,22 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrapAbility : CollisionAbility, IcollisionAbility
-{
-    public int damage = 10;
 
-    public void Execute()
+    public class TrapAbility : CollisionAbility
     {
-        foreach (var target in Colliders)
+        public int damage = 10;
+
+        public void Execute()
         {
-            if (target != null)
+            foreach (var target in collisions)
             {
-                if (target.gameObject.CompareTag("Player"))
+                var targetHealth = target?.gameObject?.GetComponent<CharacterH>();
+                if (targetHealth != null)
                 {
-                    target.GetComponent<CharacterHealth>().health -= damage;
-                    Destroy(gameObject);
+                    targetHealth.health -= damage;
                 }
             }
         }
     }
-}
