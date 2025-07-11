@@ -8,8 +8,10 @@ public static class Utils
 {
     //public static List<Collider> GetAllColliders(this GameObject go)
     //{
-    //    return go == null ? null : new List<go.GetComponent<Collider>>()>;
+    //    return go == null ? null : go.GetComponent<Collider>().ToList();
     //}
+
+    //public static List<Collider> GetAllColliders1 = new List<Collider>();
 
     public static Collider GetCollider(this GameObject go)
     {
